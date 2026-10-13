@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { DataField } from "@/components/fx/data-field";
 import { CountUp, Magnetic, Reveal, Spotlight, Tilt } from "@/components/fx/interactive";
+import { AnonymizerLive } from "@/components/anonymizer-live";
 import { MatchGraph } from "@/components/match-graph";
-import { RedactionDemo } from "@/components/redaction-demo";
 import { Eyebrow, SectionTitle } from "@/components/ui";
 import { buyerPromises, dataTypes, faqs, proof, sellerPromises, sources, steps } from "@/lib/content";
 
@@ -44,9 +44,9 @@ export default function Home() {
           </div>
           <div className="animate-drop [animation-delay:300ms]">
             <Tilt className="rounded-2xl">
-              <RedactionDemo />
+              <AnonymizerLive />
             </Tilt>
-            <p className="mt-3 text-center font-mono text-[11px] text-muted">Hover to pause · click the badge to toggle</p>
+            <p className="mt-3 text-center font-mono text-[11px] text-muted">Live demo running in your browser · hover to pause</p>
           </div>
         </div>
       </section>
