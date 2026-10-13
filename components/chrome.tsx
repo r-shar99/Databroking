@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Magnetic, ScrollProgress } from "@/components/fx/interactive";
 
 export function Logo({ className = "" }: { className?: string }) {
   return (
@@ -28,8 +29,9 @@ export function SiteHeader() {
         </Link>
         <nav className="hidden items-center gap-7 text-sm text-ink-2 md:flex">
           {nav.map((n) => (
-            <Link key={n.href} href={n.href} className="transition hover:text-ink">
+            <Link key={n.href} href={n.href} className="group relative transition hover:text-ink">
               {n.label}
+              <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-cobalt transition-transform duration-300 group-hover:scale-x-100" />
             </Link>
           ))}
         </nav>
@@ -37,11 +39,14 @@ export function SiteHeader() {
           <Link href="/buy" className="hidden rounded-full px-4 py-2 text-sm font-medium text-ink-2 hover:text-ink sm:inline-block">
             For labs
           </Link>
-          <Link href="/sell" className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-cobalt">
-            Get a valuation
-          </Link>
+          <Magnetic>
+            <Link href="/sell" className="block rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-cobalt">
+              Get a valuation
+            </Link>
+          </Magnetic>
         </div>
       </div>
+      <ScrollProgress />
     </header>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import { SiteHeader, SiteFooter } from "@/components/chrome";
+import { CursorAura } from "@/components/fx/interactive";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         <main>{children}</main>
         <SiteFooter />
+        <CursorAura />
       </body>
     </html>
   );

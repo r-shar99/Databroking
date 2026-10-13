@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DataField } from "@/components/fx/data-field";
+import { Reveal, Spotlight } from "@/components/fx/interactive";
 import { Eyebrow, SectionTitle } from "@/components/ui";
 
 export const metadata: Metadata = {
@@ -37,8 +39,9 @@ const gates = [
 export default function TrustPage() {
   return (
     <>
-      <section className="grain">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+      <section className="relative overflow-hidden">
+        <DataField />
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
           <Eyebrow>Provenance is the product</Eyebrow>
           <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[1.03] tracking-tight sm:text-6xl">
             Six gates between your export and <span className="font-display font-normal italic text-cobalt">anyone&apos;s model.</span>
@@ -51,15 +54,17 @@ export default function TrustPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <ol className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {gates.map((g, i) => (
-            <li key={g.title} className="bg-card p-7">
-              <span className="font-mono text-xs text-cobalt">GATE {String(i + 1).padStart(2, "0")}</span>
-              <h3 className="mt-4 text-xl font-semibold tracking-tight">{g.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-2">{g.body}</p>
-            </li>
+            <Reveal key={g.title} delay={(i % 3) * 100} className="h-full">
+              <Spotlight className="h-full rounded-2xl border border-line bg-card p-7 transition-transform duration-300 hover:-translate-y-1">
+                <span className="font-mono text-xs text-cobalt">GATE {String(i + 1).padStart(2, "0")}</span>
+                <h3 className="mt-4 text-xl font-semibold tracking-tight">{g.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-2">{g.body}</p>
+              </Spotlight>
+            </Reveal>
           ))}
-        </ol>
+        </div>
       </section>
 
       <section className="bg-night text-white">

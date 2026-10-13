@@ -38,14 +38,20 @@ function Piece({ seg, scrubbed }: { seg: Seg; scrubbed: boolean }) {
 
 export function RedactionDemo() {
   const [scrubbed, setScrubbed] = useState(false);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
+    if (paused) return;
     const id = setInterval(() => setScrubbed((s) => !s), 3200);
     return () => clearInterval(id);
-  }, []);
+  }, [paused]);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-night-2 shadow-2xl shadow-cobalt/20">
+    <div
+      onPointerEnter={() => setPaused(true)}
+      onPointerLeave={() => setPaused(false)}
+      className="relative overflow-hidden rounded-2xl border border-white/10 bg-night-2 shadow-2xl shadow-cobalt/30"
+    >
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
         <div className="flex gap-1.5">
           <span className="size-2.5 rounded-full bg-white/15" />
@@ -62,7 +68,12 @@ export function RedactionDemo() {
           {scrubbed ? "scrubbed · ready to license" : "raw export · not sellable"}
         </button>
       </div>
-      <div className="space-y-4 p-5 font-mono text-[12.5px] leading-relaxed text-white/80">
+      <div className="relative space-y-4 overflow-hidden p-5 font-mono text-[12.5px] leading-relaxed text-white/80">
+        <div
+          key={String(scrubbed)}
+          aria-hidden="true"
+          className="scan-beam pointer-events-none absolute inset-x-0 top-0 h-full bg-gradient-to-b from-transparent via-lime/15 to-transparent"
+        />
         {lines.map((l, i) => (
           <div key={i}>
             <div className="mb-1 flex gap-2 text-[11px] text-white/40">

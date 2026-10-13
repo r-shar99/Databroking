@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { DataField } from "@/components/fx/data-field";
+import { Reveal } from "@/components/fx/interactive";
 import { LeadForm } from "@/components/lead-form";
 import { Eyebrow } from "@/components/ui";
 import { sellerPromises } from "@/lib/content";
@@ -18,8 +20,9 @@ const drivers = [
 
 export default function SellPage() {
   return (
-    <section className="grain">
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_1.3fr] lg:py-24">
+    <section className="relative overflow-hidden">
+      <DataField />
+      <div className="relative mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_1.3fr] lg:py-24">
         <div className="min-w-0">
           <Eyebrow>For founders, acquirers &amp; trustees</Eyebrow>
           <h1 className="mt-5 text-5xl font-semibold leading-[1.03] tracking-tight">
@@ -50,9 +53,9 @@ export default function SellPage() {
             ))}
           </ul>
         </div>
-        <div className="lg:pt-4">
+        <Reveal delay={150} className="lg:pt-4">
           <LeadForm kind="seller" />
-        </div>
+        </Reveal>
       </div>
     </section>
   );

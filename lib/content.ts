@@ -95,3 +95,5 @@ export const faqs = [
     a: "No. Names, emails, phone numbers, customer identifiers, secrets and credentials are replaced with consistent placeholders, so the data stays coherent and the people in it stay anonymous. You review a scrubbed sample first.",
   },
 ];
+
+export const sources = ["Slack", "Jira", "GitHub", "Gmail", "Linear", "Notion", "Zendesk", "Google Drive", "Confluence", "Salesforce", "Microsoft Teams", "Intercom"];

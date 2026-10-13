@@ -26,6 +26,7 @@ export const DATA_TYPES = [
 ] as const;
 
 export const BUYER_TYPES = [
+  "Data broker",
   "Frontier AI lab",
   "Data / RL vendor",
   "AI startup",

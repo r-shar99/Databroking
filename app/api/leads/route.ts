@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { attioConfigured, pushLeadToAttio } from "@/lib/attio";
 import { leadSchema } from "@/lib/leads";
 
 export async function POST(req: Request) {
@@ -17,39 +18,22 @@ export async function POST(req: Request) {
     );
   }
 
-  const { website, startedAt, ...lead } = parsed.data;
+  const lead = parsed.data;
+  const { website, startedAt } = lead;
   // Bots: pretend success so they don't retry.
   if (website || (startedAt && Date.now() - startedAt < 2000)) {
     return NextResponse.json({ ok: true });
   }
 
-  const url = process.env.SHEETS_WEBHOOK_URL;
-  const secret = process.env.SHEETS_WEBHOOK_SECRET;
-  if (!url || !secret) {
-    console.error("SHEETS_WEBHOOK_URL / SHEETS_WEBHOOK_SECRET not set");
+  if (!attioConfigured()) {
+    console.error("ATTIO_API_KEY / ATTIO_OWNER_EMAIL not set");
     return NextResponse.json({ ok: false, error: "Intake is not configured yet." }, { status: 503 });
   }
 
-  const row = {
-    ...lead,
-    dataTypes: lead.dataTypes.join(", "),
-    submittedAt: new Date().toISOString(),
-    source: req.headers.get("referer") ?? "",
-  };
-
   try {
-    // Apps Script answers with a 302 to googleusercontent; fetch follows it.
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ secret, lead: row }),
-      redirect: "follow",
-      signal: AbortSignal.timeout(10_000),
-    });
-    const out = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
-    if (!res.ok || !out?.ok) throw new Error(out?.error ?? `HTTP ${res.status}`);
+    await pushLeadToAttio(lead, req.headers.get("referer") ?? "");
   } catch (err) {
-    console.error("Sheets webhook failed", err);
+    console.error("Attio push failed", err, lead.email);
     return NextResponse.json({ ok: false, error: "Couldn't save your submission. Please try again." }, { status: 502 });
   }
 
