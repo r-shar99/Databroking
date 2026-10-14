@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 // Hero background: a field of data points that bends away from the cursor and
-// lights up near it, with "drops" of data falling through the grid.
+// lights up near it.
 export function DataField({ className = "" }: { className?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
@@ -14,7 +14,6 @@ export function DataField({ className = "" }: { className?: string }) {
     const GAP = 26;
     let w = 0, h = 0, dpr = 1, raf = 0, visible = true;
     let pts: { x: number; y: number; ox: number; oy: number; vx: number; vy: number }[] = [];
-    const drops: { x: number; y: number; v: number; len: number }[] = [];
     const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
 
     function resize() {
@@ -67,35 +66,6 @@ export function DataField({ className = "" }: { className?: string }) {
           ctx.fillStyle = "rgba(12,13,16,0.13)";
           ctx.fillRect(p.x - 0.75, p.y - 0.75, 1.5, 1.5);
         }
-      }
-
-      // Connect points near the cursor: a little live network.
-      if (mouse.x > -999) {
-        ctx.lineWidth = 1;
-        const near = pts.filter((p) => Math.hypot(p.x - mouse.x, p.y - mouse.y) < 110);
-        for (let i = 0; i < near.length; i += 2) {
-          const a = near[i], b = near[(i * 7 + 3) % near.length];
-          const d = Math.hypot(a.x - mouse.x, a.y - mouse.y);
-          ctx.strokeStyle = `rgba(47,60,255,${0.25 * (1 - d / 110)})`;
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-        }
-      }
-
-      // Falling drops, snapped to grid columns.
-      if (drops.length < 14 && Math.random() < 0.08) {
-        drops.push({ x: Math.floor(Math.random() * (w / GAP)) * GAP + GAP / 2, y: -40, v: 2 + Math.random() * 3, len: 30 + Math.random() * 60 });
-      }
-      for (let i = drops.length - 1; i >= 0; i--) {
-        const d = drops[i];
-        d.y += d.v;
-        const g = ctx.createLinearGradient(d.x, d.y - d.len, d.x, d.y);
-        g.addColorStop(0, "rgba(47,60,255,0)");
-        g.addColorStop(1, "rgba(47,60,255,0.55)");
-        ctx.strokeStyle = g; ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.moveTo(d.x, d.y - d.len); ctx.lineTo(d.x, d.y); ctx.stroke();
-        ctx.fillStyle = "rgba(212,255,58,0.9)";
-        ctx.fillRect(d.x - 2, d.y - 2, 4, 4);
-        if (d.y - d.len > h) drops.splice(i, 1);
       }
     }
 

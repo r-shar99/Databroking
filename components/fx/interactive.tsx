@@ -119,38 +119,6 @@ export function CountUp({ value, className = "" }: { value: string; className?: 
   return <span ref={ref} className={className}>{text}</span>;
 }
 
-/** Soft glowing aura that trails the cursor across the page (desktop only). */
-export function CursorAura() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!canHover() || reduced()) return;
-    const el = ref.current!;
-    let x = -500, y = -500, tx = -500, ty = -500, raf = 0, hot = false;
-    const move = (e: PointerEvent) => {
-      tx = e.clientX; ty = e.clientY;
-      const t = e.target as HTMLElement | null;
-      const now = !!t?.closest("a,button,summary,[data-hot]");
-      if (now !== hot) { hot = now; el.dataset.hot = String(hot); }
-      el.style.opacity = "1";
-    };
-    const tick = () => {
-      x += (tx - x) * 0.14; y += (ty - y) * 0.14;
-      el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-      raf = requestAnimationFrame(tick);
-    };
-    const hide = () => (el.style.opacity = "0");
-    window.addEventListener("pointermove", move);
-    document.addEventListener("pointerleave", hide);
-    raf = requestAnimationFrame(tick);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("pointermove", move);
-      document.removeEventListener("pointerleave", hide);
-    };
-  }, []);
-  return <div ref={ref} aria-hidden="true" className="cursor-aura" />;
-}
-
 /** Thin progress bar showing how far down the page you are. */
 export function ScrollProgress() {
   const ref = useRef<HTMLDivElement>(null);

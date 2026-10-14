@@ -126,28 +126,6 @@ body {
   filter: none;
 }
 
-/* Cursor aura. */
-.cursor-aura {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 60;
-  width: 28px;
-  height: 28px;
-  border-radius: 999px;
-  pointer-events: none;
-  opacity: 0;
-  border: 1.5px solid var(--color-cobalt);
-  background: rgba(47, 60, 255, 0.08);
-  transition: width 0.25s ease, height 0.25s ease, background 0.25s ease, border-color 0.25s ease, opacity 0.3s ease;
-}
-.cursor-aura[data-hot="true"] {
-  width: 56px;
-  height: 56px;
-  background: rgba(212, 255, 58, 0.45);
-  border-color: transparent;
-}
-
 /* Animated gradient text. */
 .text-shimmer {
   background: linear-gradient(100deg, var(--color-cobalt) 20%, #7b5cff 40%, var(--color-cobalt-deep) 60%, var(--color-cobalt) 80%);
